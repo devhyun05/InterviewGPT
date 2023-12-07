@@ -26,7 +26,13 @@ const Main = () => {
       }
     } else {
       try {
-        const response = await fetch('https://www.talktogpt.pro');
+        const response = await fetch('https://www.talktogpt.pro', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
         const data = await response.json();
 
         if (data.error) {
@@ -134,8 +140,7 @@ const Main = () => {
           "Content-Type": 'application/json'
         },
         body: JSON.stringify({ prompt: gptResponse.choices[0].message.content })
-      });
-
+      }) 
       const audioBuffer = await responseVoice.arrayBuffer();
       const audioBlob = new Blob([audioBuffer], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(audioBlob);

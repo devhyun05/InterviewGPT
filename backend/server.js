@@ -2,28 +2,25 @@ const express = require('express');
 const path = require('path'); 
 const axios = require('axios');
 const cors = require('cors');
-const HTTP_PORT = process.env.PORT || 3000; 
 const OpenAI = require("openai");
-
+const HTTP_PORT = process.env.PORT || 8000; 
 
 const app = express();
-
-
-
 require('dotenv').config();
 
 const corsOptions = {
   origin: [
       'https://talktochatgpt-a2cc316d8b34.herokuapp.com/',
-      "http://localhost:3000",
+      "http://localhost:5173",
       "https://www.talktogpt.pro"
   ],
 };
+app.use(cors(corsOptions));
 
 app.use(express.json());
-app.use(cors(corsOptions));
-app.use(express.static(path.join(__dirname + "/public"))); 
 
+
+app.use('/static', express.static(path.join(__dirname + "/public")));
 
 
 
@@ -39,6 +36,7 @@ app.get('/', async (req, res) => {
       { expires_in: 3600 },
       { headers: { authorization: process.env.ASSEMBLY_API_KEY } });
     const { data } = response;
+    console.log(data); 
     res.json(data);
   } catch (error) {
     const { response: { status, data } } = error;
@@ -83,6 +81,7 @@ app.post("/gptvoice", async (req, res) => {
   }
 
 })
+
 
 app.listen(HTTP_PORT, () =>{
   console.log(`Server is listening on PORT: ${HTTP_PORT}`); 
