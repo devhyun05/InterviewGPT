@@ -1,11 +1,13 @@
 import './App.css'
+import NavigationBar from '../src/components/NavigationBar';
 import Main from '../src/pages/Main';
 function App() {
 
-
   return (
     <>
-    <Main/>
+      <NavigationBar/>
+      <Main/>
+
     </>
   )
 }

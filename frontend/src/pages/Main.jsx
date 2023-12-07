@@ -1,12 +1,30 @@
-import { useState } from 'react';
-import RecordRTC from 'recordrtc'; 
+import { useState, useCallback } from 'react';
+import RecordRTC from 'recordrtc';
 import { StereoAudioRecorder } from 'recordrtc';
+import debounce from 'lodash/debounce';
 
 const Main = () => {
   const [recording, setRecording] = useState(false);
   const [socket, setSocket] = useState(null);
   const [recorder, setRecorder] = useState(null);
-  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
+
+  // Debounce the message processing function
+  const processMessagesDebounced = useCallback(
+    debounce((texts) => {
+      setMessages((prevMessages) => {
+        let newMessages = [...prevMessages];
+
+        for (const key of Object.keys(texts)) {
+          if (texts[key]) {
+            newMessages.push(texts[key]);
+          }
+        }
+
+        return newMessages;
+      });
+    }, 500), [] // Adjust the debounce time as needed (500 milliseconds in this example)
+  );
 
   const run = async () => {
     if (recording) {
@@ -37,18 +55,12 @@ const Main = () => {
         );
 
         newSocket.onmessage = (message) => {
-          let msg = '';
           const res = JSON.parse(message.data);
           const texts = {};
           texts[res.audio_start] = res.text;
-          const keys = Object.keys(texts);
-          keys.sort((a, b) => a - b);
-          for (const key of keys) {
-            if (texts[key]) {
-              msg += `${texts[key]}`;
-            }
-          }
-          setMessage(msg);
+
+          // Use the debounced function to process messages
+          processMessagesDebounced(texts);
         };
 
         newSocket.onerror = (event) => {
@@ -107,8 +119,26 @@ const Main = () => {
 
   return (
     <>
-      <button onClick={run}>Start Recording</button>
-      <p>{message}</p>
+      <div className="w-screen h-screen flex flex-col justify-center items-center">
+        <div className="bg-gray-300 w-3/6 h-4/6 rounded-xl">
+          <div className="chat chat-end">
+            {messages.map((msg, index) => (
+              <div key={index} className="chat-bubble">
+                {msg}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <button
+            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            onClick={run}
+          >
+            {recording ? 'Stop Talk' : 'Start Talk'}
+          </button>
+        </div>
+      </div>
     </>
   );
 };
