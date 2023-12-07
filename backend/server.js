@@ -1,43 +1,74 @@
 const express = require('express');
-// const OpenAI = require("openai");
 const axios = require('axios');
 const cors = require('cors');
+const OpenAI = require("openai");
+const elevenLabsAPI = require("elevenlabs-api");
+
 const app = express();
 
-
-
 app.use(express.json());
-app.use(cors()); 
+app.use(cors());
 
-require('dotenv').config(); 
-// const openai = new OpenAI({
-//     apiKey: "process.env"
-// }); 
+require('dotenv').config();
 
-// async function main() {
-//     const chatCompletion = await openai.chat.completions.create({
-//         messages: [{role: "user", content: "Hello"}], 
-//         model: "gpt-3.5-turbo",
-//     });
-//     console.log(chatCompletion.choices[0]);
-// }
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
-// main(); 
+
 
 app.get('/', async (req, res) => {
-    try {
-      const response = await axios.post('https://api.assemblyai.com/v2/realtime/token', 
-        { expires_in: 3600 },
-        { headers: { authorization: process.env.ASSEMBLY_API_KEY } });
-      const { data } = response;
-      res.json(data);
-    } catch (error) {
-      const {response: {status, data}} = error;
-      res.status(status).json(data);
-    }
-  });
-  
-  app.set('port', 8000);
-  const server = app.listen(app.get('port'), () => {
-    console.log(`Server is running on port ${server.address().port}`);
-  });
+  try {
+    const response = await axios.post('https://api.assemblyai.com/v2/realtime/token',
+      { expires_in: 3600 },
+      { headers: { authorization: process.env.ASSEMBLY_API_KEY } });
+    const { data } = response;
+    res.json(data);
+  } catch (error) {
+    const { response: { status, data } } = error;
+    res.status(status).json(data);
+  }
+});
+
+app.post("/gptprompt", async (req, res) => {
+  try {
+    const userTalk = req.body.chat;
+
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: "user", content: userTalk }],
+      model: "gpt-3.5-turbo",
+    });
+
+    res.json(chatCompletion);
+  } catch (error) {
+    console.error("Error: ", error);
+  }
+
+})
+
+app.post("/gptvoice", async (req, res) => {
+  try {
+
+    const gptResponse = req.body.prompt; 
+
+    const options = {
+      method: 'POST',
+      headers: {'Accept': 'audio/mpeg', 'Content-Type': 'application/json', "xi-api-key": process.env.ELEVENLABS_API_KEY},
+      body: `{"model_id":"eleven_monolingual_v1","text":"${gptResponse}","voice_settings":{"similarity_boost":0.5,"stability":0.5}}`
+    };
+    
+    const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM', options);
+    const audioBuffer = await response.arrayBuffer(); 
+
+    res.set('Content-Type', 'audio/mpeg');
+    res.send(Buffer.from(audioBuffer)); 
+  } catch (error) {
+    console.error("Error: ", error);
+  }
+
+})
+
+app.set('port', 8000);
+const server = app.listen(app.get('port'), () => {
+  console.log(`Server is running on port ${server.address().port}`);
+});

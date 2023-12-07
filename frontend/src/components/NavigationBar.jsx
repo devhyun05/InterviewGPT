@@ -13,7 +13,7 @@ const NavigationBar = () => {
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                   alt="Your Company"
                 />
-                <div className="text-white ml-3 font-bold">InterviewGPT</div>
+                <div className="text-white ml-3 font-bold">TalkGPT</div>
               </div>
          
             </div>
