@@ -1,15 +1,28 @@
 const express = require('express');
+const path = require('path'); 
 const axios = require('axios');
 const cors = require('cors');
 const OpenAI = require("openai");
-const elevenLabsAPI = require("elevenlabs-api");
+
 
 const app = express();
 
-app.use(express.json());
-app.use(cors());
-
 require('dotenv').config();
+
+const corsOptions = {
+  origin: [
+      'https://talktochatgpt-a2cc316d8b34.herokuapp.com/',
+      "http://localhost:3000",
+      "https://www.talktogpt.pro"
+  ],
+};
+
+app.use(express.json());
+app.use(cors(corsOptions));
+
+app.use(express.static(path.join(__dirname + "/public"))); 
+
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
