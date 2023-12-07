@@ -8,7 +8,7 @@ const OpenAI = require("openai");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname + "/public"))); 
+
 
 require('dotenv').config();
 
@@ -22,7 +22,7 @@ const corsOptions = {
 
 app.use(express.json());
 app.use(cors(corsOptions));
-
+app.use(express.static(path.join(__dirname + "/public"))); 
 
 
 

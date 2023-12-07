@@ -26,7 +26,7 @@ const Main = () => {
       }
     } else {
       try {
-        const response = await fetch('http://localhost:8000');
+        const response = await fetch('https://www.talktogpt.pro');
         const data = await response.json();
 
         if (data.error) {
