@@ -2,10 +2,13 @@ const express = require('express');
 const path = require('path'); 
 const axios = require('axios');
 const cors = require('cors');
+const HTTP_PORT = process.env.PORT || 3000; 
 const OpenAI = require("openai");
 
 
 const app = express();
+
+app.use(express.static(path.join(__dirname + "/public"))); 
 
 require('dotenv').config();
 
@@ -20,7 +23,7 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 
-app.use(express.static(path.join(__dirname + "/public"))); 
+
 
 
 
@@ -81,7 +84,6 @@ app.post("/gptvoice", async (req, res) => {
 
 })
 
-app.set('port', 8000);
-const server = app.listen(app.get('port'), () => {
-  console.log(`Server is running on port ${server.address().port}`);
+app.listen(HTTP_PORT, () =>{
+  console.log(`Server is listening on PORT: ${HTTP_PORT}`); 
 });

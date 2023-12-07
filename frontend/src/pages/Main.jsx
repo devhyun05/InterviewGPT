@@ -2,7 +2,7 @@ import { useState } from 'react';
 import RecordRTC from 'recordrtc';
 import { StereoAudioRecorder } from 'recordrtc';
 
-const backend = 'http://localhost:8000';
+const backend = 'https://www.talktogpt.pro';
 
 const Main = () => {
   const [recording, setRecording] = useState(false);
