@@ -26,12 +26,7 @@ const Main = () => {
       }
     } else {
       try {
-        const response = await fetch('https://www.talktogpt.pro', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await fetch('https://www.talktogpt.pro');
 
         const data = await response.json();
 
@@ -43,7 +38,7 @@ const Main = () => {
         const { token } = data;
 
         const newSocket = new WebSocket(
-          `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`
+          `wss://www.talktogpt.pro/v2/realtime/ws?sample_rate=16000&token=${token}`
         );
 
         newSocket.onmessage = (message) => {
