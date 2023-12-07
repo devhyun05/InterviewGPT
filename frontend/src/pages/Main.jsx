@@ -38,7 +38,7 @@ const Main = () => {
         const { token } = data;
 
         const newSocket = new WebSocket(
-          `wss://www.talktogpt.pro/v2/realtime/ws?sample_rate=16000&token=${token}`
+          `wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000&token=${token}`
         );
 
         newSocket.onmessage = (message) => {
