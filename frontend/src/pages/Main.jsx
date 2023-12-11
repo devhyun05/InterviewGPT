@@ -4,7 +4,7 @@ import { StereoAudioRecorder } from 'recordrtc';
 import robot from '../assets/ai.png';
 import personPhoto from '../assets/person.png'; 
 
-const backend = 'http://localhost:8000';
+const backend = 'https://www.talktogpt.pro';
 
 const Main = () => {
   const [recording, setRecording] = useState(false);
