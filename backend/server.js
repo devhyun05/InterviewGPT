@@ -9,19 +9,21 @@ const app = express();
 
 require('dotenv').config();
 
+
+app.use(express.json());
+// app.use(express.static(path.join(__dirname + "/public")));
+
 const corsOptions = {
   origin: [
       'https://talktochatgpt-a2cc316d8b34.herokuapp.com/',
       "http://localhost:5173",
       "https://www.talktogpt.pro"
   ],
+  methods: ["GET", "POST", "PUT", "DELETE"], // accept HTTP methods list
+  allowHeaders: ["Content-Type", "Authorization", "text/plain"] // accept header list
 };
 app.use(cors(corsOptions));
 
-app.use(express.json());
-
-
-app.use(express.static(path.join(__dirname + "/public")));
 
 
 
@@ -33,6 +35,8 @@ const openai = new OpenAI({
 
 app.get('/', async (req, res) => {
   try {
+    
+    console.log("call");
     const response = await axios.post('https://api.assemblyai.com/v2/realtime/token',
       { expires_in: 3600 },
       { headers: { authorization: process.env.ASSEMBLY_API_KEY } });

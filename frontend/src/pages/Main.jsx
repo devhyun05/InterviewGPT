@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import RecordRTC from 'recordrtc';
 import { StereoAudioRecorder } from 'recordrtc';
+import robot from '../assets/ai.png';
+import personPhoto from '../assets/person.png'; 
 
-const backend = 'https://www.talktogpt.pro';
+const backend = 'http://localhost:8000';
 
 const Main = () => {
   const [recording, setRecording] = useState(false);
@@ -26,7 +28,7 @@ const Main = () => {
       }
     } else {
       try {
-        const response = await fetch('https://www.talktogpt.pro');
+        const response = await fetch(`${backend}`);
 
         const data = await response.json();
 
@@ -162,7 +164,7 @@ const Main = () => {
                 <div className="chat chat-end mt-5">
                   <div className="chat-image avatar">
                     <div className="w-10 rounded-full">
-                      <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                      <img alt="Tailwind CSS chat bubble component" src={personPhoto} />
                     </div>
                   </div>
                   <div className="chat-bubble">{item}</div>
@@ -172,7 +174,7 @@ const Main = () => {
                   <div className="chat chat-start">
                     <div className="chat-image avatar">
                       <div className="w-10 rounded-full">
-                        <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                        <img alt="Tailwind CSS chat bubble component" src={robot} />
                       </div>
                     </div>
                     <div className="chat-bubble">{gptResponse[index]}</div>
