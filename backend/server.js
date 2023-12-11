@@ -45,18 +45,18 @@ app.get('/', async (req, res) => {
 });
 
 app.post("/gptprompt", async (req, res) => {
-  try {
-    const userTalk = req.body.chat;
+  // try {
+  //   const userTalk = req.body.chat;
 
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: userTalk }],
-      model: "gpt-3.5-turbo",
-    });
+  //   const chatCompletion = await openai.chat.completions.create({
+  //     messages: [{ role: "user", content: userTalk }],
+  //     model: "gpt-3.5-turbo",
+  //   });
 
-    res.json(chatCompletion);
-  } catch (error) {
-    console.error("Error: ", error);
-  }
+  //   res.json(chatCompletion);
+  // } catch (error) {
+  //   console.error("Error: ", error);
+  // }
 
 })
 
