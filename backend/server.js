@@ -11,7 +11,7 @@ require('dotenv').config();
 
 
 app.use(express.json());
-// app.use(express.static(path.join(__dirname + "/public")));
+app.use(express.static(path.join(__dirname + "/public")));
 
 const corsOptions = {
   origin: [
@@ -23,8 +23,6 @@ const corsOptions = {
   allowHeaders: ["Content-Type", "Authorization", "text/plain"] // accept header list
 };
 app.use(cors(corsOptions));
-
-
 
 
 const openai = new OpenAI({
