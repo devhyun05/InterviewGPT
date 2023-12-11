@@ -4,7 +4,7 @@ import { StereoAudioRecorder } from 'recordrtc';
 import robot from '../assets/ai.png';
 import personPhoto from '../assets/person.png'; 
 
-const backend = 'https://www.talktogpt.pro';
+const backend = 'http://localhost:8000';
 
 const Main = () => {
   const [recording, setRecording] = useState(false);
@@ -28,10 +28,16 @@ const Main = () => {
       }
     } else {
       try {
-        const response = await fetch(`${backend}`);
+       
+        const response = await fetch(`${backend}`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
 
         const data = await response.json();
-
+       
         if (data.error) {
           alert(data.error);
           return;
@@ -44,6 +50,7 @@ const Main = () => {
         );
 
         newSocket.onmessage = (message) => {
+          
           let msg = '';
           const res = JSON.parse(message.data);
           const texts = {};
