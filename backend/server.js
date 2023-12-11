@@ -9,9 +9,9 @@ const app = express();
 
 require('dotenv').config();
 
-
-app.use(express.json());
-app.use(express.static(path.join(__dirname + "/public")));
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 const corsOptions = {
   origin: [
@@ -22,14 +22,11 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"], // accept HTTP methods list
   allowHeaders: ["Content-Type", "Authorization", "text/plain"] // accept header list
 };
+
+// middlewares
+app.use(express.json());
 app.use(cors(corsOptions));
-
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
-
-
+app.use(express.static(path.join(__dirname + "/public")));
 
 app.get('/', async (req, res) => {
   try {
