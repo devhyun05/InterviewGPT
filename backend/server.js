@@ -49,7 +49,7 @@ app.post("/gptprompt", async (req, res) => {
 
     const chatCompletion = await openai.chat.completions.create({
       messages: [{ role: "user", content: userTalk }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-3.5-turbo-0613",
     });
 
     res.json(chatCompletion);
